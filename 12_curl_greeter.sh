@@ -1,6 +1,6 @@
 #!/bin/bash
 
 
-HOST_URL=$(kubectl get routes.serving.knative.dev greeter -o jsonpath='{.status.domain}')
+SVC_URL=$(oc get ksvc greeter | awk 'NR==2{print $2}')
 
-curl -H "Host: ${HOST_URL}" istio-ingressgateway-istio-system.apps.guru.devx.red
+curl $SVC_URL
