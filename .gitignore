@@ -3,3 +3,5 @@ bin
 istio-tutorial
 knative-tutorial
 .vscode
+
+2_login.sh
