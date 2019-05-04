@@ -1,5 +1,6 @@
 #!/bin/bash
 
+oc project $WORKSHOP_USER-istiotutorial
 oc apply -f istio-tutorial/customer/kubernetes/Deployment.remote.yml
 oc apply -f istio-tutorial/customer/kubernetes/Service.yml
 oc apply -f istio-tutorial/preference/kubernetes/Deployment.remote.yml
