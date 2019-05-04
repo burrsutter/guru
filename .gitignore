@@ -2,6 +2,7 @@
 bin
 istio-tutorial
 knative-tutorial
+guru-night
 .vscode
 
 2_login.sh
