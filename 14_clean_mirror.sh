@@ -1,4 +1,4 @@
 #!/bin/bash
 
-oc delete vs/recommendation
-oc delete dr/recommendation 
+oc delete virtualservice/recommendation
+oc delete destinationrule/recommendation 
