@@ -1,0 +1,81 @@
+Dealing with RHPDS Cluster
+
+----
+
+oc login -u opentlc-mgr -p whatever
+
+oc -n gpte-userquota-operator scale deployments --replicas=0 userquota-operator
+oc delete clusterresourcequotas.quota.openshift.io clusterquota-opentlc-mgr
+oc get clusterresourcequotas.quota.openshift.io
+
+
+oc new-project istio-operator
+oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
+
+git clone https://github.com/redhat-developer-demos/guru-night
+
+cd guru-night
+
+oc new-project istio-system
+oc apply -n istio-system -f config/basic-install.yaml
+
+watch kubectl get pods -n istio-system
+Every 2.0s: kubectl get pods -n istio-system                                                                              burr.local: Sat Jul 13 13:49:11 2019
+
+NAME                                      READY   STATUS    RESTARTS   AGE
+elasticsearch-0                           1/1     Running   0          6m6s
+grafana-86dc5978b8-8bgtf                  1/1     Running   0          2m40s
+istio-citadel-7678d4749b-xjjhx            1/1     Running   0          6m45s
+istio-egressgateway-66d8b969b8-67z4c      1/1     Running   0          3m27s
+istio-galley-7f57cd4c6c-85rkm             1/1     Running   0          4m39s
+istio-ingressgateway-7794d8d4fc-49dfx     1/1     Running   0          3m27s
+istio-pilot-79868477cf-bdjbf              2/2     Running   0          3m59s
+istio-policy-7486f4cb6c-6sdjd             2/2     Running   0          4m17s
+istio-sidecar-injector-66d49c6865-w8mdf   1/1     Running   0          3m4s
+istio-telemetry-995cb7d9b-l5wpz           2/2     Running   0          4m16s
+jaeger-agent-7fw9z                        1/1     Running   0          6m8s
+jaeger-agent-knb24                        1/1     Running   0          6m8s
+jaeger-agent-lv7xj                        1/1     Running   0          6m8s
+jaeger-agent-szxl4                        1/1     Running   0          6m8s
+jaeger-collector-96756f879-t64cd          1/1     Running   3          6m7s
+jaeger-query-6f4456546c-h5sft             1/1     Running   3          6m7s
+kiali-c58c8476d-sm6zd                     1/1     Running   0          2m10s
+prometheus-5cb5d7549b-wfnx7               1/1     Running   0          6m30s
+
+oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
+NAME                   URL
+grafana                grafana-istio-system.apps.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com
+istio-ingressgateway   istio-ingressgateway-istio-system.apps.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com
+jaeger-query           jaeger-query-istio-system.apps.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com
+prometheus             prometheus-istio-system.apps.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com
+tracing                tracing-istio-system.apps.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com
+
+# if not using RHPDS
+./bin/createUsers.sh
+
+./bin/usersAndGroupsConfig.sh
+
+oc get groups workshop-students
+
+./bin/configProjects.sh
+
+./bin/resourceQuotaToProjects.sh
+
+
+kubectl get resourcequotas tutorials-resource-quota -n tutorial-1 -o yaml
+
+
+----
+
+What is the student user password?
+----
+
+oc get secrets -n openshift-config  htpasswd-secret -oyaml | yq r - data.htpasswd | base64 --decode
+
+
+oc login -u user1 -p $apr1$ufTHgInX$MBaLKMl8HyworXHvLygQ31 https://api.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com:6443/
+
+oc login -u user1 -p r3dh4t1! https://api.cluster-raleigh-a26b.raleigh-a26b.openshiftworkshop.com:6443/
+----
+
+
